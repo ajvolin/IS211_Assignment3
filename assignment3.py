@@ -41,7 +41,11 @@ def processData(data):
 
     # Instantiate count dictionaries
     hits = { 'images': 0, 'total': 0 }
-    browserHits = { 'Chrome': 0, 'Safari': 0, 'Firefox': 0, 'Internet Explorer': 0 }
+    browserHits = { 'Chrome': 0,
+                    'Safari': 0,
+                    'Firefox': 0,
+                    'Internet Explorer': 0
+                  }
     hourHits = { str(i): 0 for i in range(0, 24) }
 
     for (line, col) in enumerate(csv.reader(data)):
@@ -75,8 +79,10 @@ def processData(data):
 
     # Print report
     print("Web Stats:")
-    print("There were {} hits, of which {} were image requests accounting for {}% of all hits.".format(hits['total'], hits['images'], image_hit_percent))
-    print("The most popular browser used was {} with {} hits.".format(top_browser[0], top_browser[1]))
+    print("There were {} hits, of which {} were image requests accounting for {}% of all hits."
+            .format(hits['total'], hits['images'], image_hit_percent))
+    print("The most popular browser used was {} with {} hits."
+            .format(top_browser[0], top_browser[1]))
     print("Hits per hour, sorted by most hits first are:")
     # Sort hourHits dict by most hits, then by hour for hours with equal hits
     for hour, hits in sorted(hourHits.items(), key=lambda hits: (hits[1],hits[0]), reverse=True):
