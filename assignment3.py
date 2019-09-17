@@ -9,7 +9,8 @@ __email__ = 'Adam.Volin56@spsmail.cuny.edu'
 import sys
 import argparse
 import datetime
-import urllib2
+import urllib.request as request
+import urllib.error
 import csv
 import re
 import operator
@@ -26,7 +27,8 @@ def downloadData(url):
             'http://s3.amazonaws.com/cuny-is211-spring2015/weblog.csv')
     """
 
-    return urllib2.urlopen(url)
+    response = request.urlopen(url)
+    return response.read().decode('utf-8').splitlines()
 
 
 def processData(data):
@@ -71,7 +73,7 @@ def processData(data):
     
     # Calculate percent of hits that were for images of total hits
     image_hit_percent = round((float(hits['images']) / hits['total']) * 100, 2)
-    top_browser = max(browserHits.iteritems(), key=operator.itemgetter(1))
+    top_browser = max(browserHits.items(), key=operator.itemgetter(1))
 
     # Pad single-digit hourHits keys with zeros - helps with sorting
     for i in range (0, 10):
@@ -102,13 +104,13 @@ def main():
     if args.url:
         try:
             csvData = downloadData(args.url)
-        except (urllib2.URLError, urllib2.HTTPError):
-            print 'There was an error retrieving the data from the provided URL. Please try a different URL.'
+        except (urllib.error.URLError, urllib.error.HTTPError):
+            print('There was an error retrieving the data from the provided URL. Please try a different URL.')
             sys.exit()
 
         processData(csvData)
     else:
-        print 'The --url parameter is required.'
+        print('The --url parameter is required.')
         sys.exit()
 
 if __name__ == '__main__':
